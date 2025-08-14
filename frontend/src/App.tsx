@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,7 +19,7 @@ function App() {
           </button>
           <div>
             <p className="text-sm text-gray-500">
-              Backend API:{" "}
+              Backend API:{' '}
               <span className="font-mono">http://localhost:3000</span>
             </p>
           </div>

@@ -1,24 +1,24 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
-import App from "./App";
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import App from './App';
 
-describe("App", () => {
-  it("renders PERN Frontend heading", () => {
+describe('App', () => {
+  it('renders PERN Frontend heading', () => {
     render(<App />);
-    expect(screen.getByText("PERN Frontend")).toBeInTheDocument();
+    expect(screen.getByText('PERN Frontend')).toBeInTheDocument();
   });
 
-  it("renders welcome message", () => {
+  it('renders welcome message', () => {
     render(<App />);
     expect(
-      screen.getByText(/Welcome to the PERN stack frontend application!/),
+      screen.getByText(/Welcome to the PERN stack frontend application!/)
     ).toBeInTheDocument();
   });
 
-  it("renders count button", () => {
+  it('renders count button', () => {
     render(<App />);
     expect(
-      screen.getByRole("button", { name: /Count: 0/ }),
+      screen.getByRole('button', { name: /Count: 0/ })
     ).toBeInTheDocument();
   });
 });
