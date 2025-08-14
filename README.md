@@ -1,39 +1,61 @@
-# PERN Docker Fortress 🏰
+# PERN-Fortress Monorepo Template 🏰
 
-Ein modernes PERN Stack Monorepo mit TypeScript, Docker und vollständiger CI/CD Pipeline.
+![GitHub](https://img.shields.io/github/license/33SLueck/Pern-docker-fortress)
+![Node.js Version](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![TypeScript](https://img.shields.io/badge/typescript-5.9+-blue)
+![React](https://img.shields.io/badge/react-19+-blue)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+![CI](https://img.shields.io/github/actions/workflow/status/33SLueck/Pern-docker-fortress/ci.yml?branch=main&label=CI)
+
+Ein modernes, flexibles PERN Stack Monorepo-Template mit TypeScript, Docker und CI/CD – ready für Production & eigene Projekte!
+
+## ✨ Features
+
+- 🏗️ **Monorepo Architecture** mit npm Workspaces
+- ⚡ **Modern Tech Stack** (React 19, Express 5, TypeScript 5.9+)
+- 🐳 **Docker Ready** mit Multi-stage Builds
+- 🔄 **Automated CI/CD** mit GitHub Actions
+- 🛡️ **Code Quality Gates** (ESLint, Prettier, Husky)
+- 📦 **Dependency Management** mit Dependabot
+- 🧪 **Testing Setup** (Vitest, React Testing Library)
+- 🎯 **Production Ready** mit Health Checks
 
 ## 🏗️ Tech Stack
 
 ### Frontend
 
-- **React 19** mit TypeScript
+- **React 19** (oder eigene Version) mit TypeScript
 - **Vite** als Build-Tool
-- **Tailwind CSS v4** für Styling
+- **Tailwind CSS v4** (optional)
 - **Vitest** für Unit Tests
-- **React Testing Library** für Component Tests
+- **React Testing Library**
 
 ### Backend
 
-- **Express.js v5** mit TypeScript
+- **Express.js v5** (oder eigene API) mit TypeScript
 - **Node.js** Runtime
 - RESTful API Architektur
 - Health Check Endpoints
 
-### Development Tools
+### Dev Tools
 
-- **ESLint v9** mit Flat Config
-- **Prettier** Code Formatting
+- **ESLint v9** (Flat Config)
+- **Prettier**
 - **Husky v9** Git Hooks
-- **lint-staged** Pre-commit Checks
-- **Commitlint** Conventional Commits
-- **npm Workspaces** Monorepo Management
+- **lint-staged**
+- **Commitlint**
+- **npm Workspaces**
 
-### CI/CD
+### CI/CD & Automation
 
 - **GitHub Actions** Multi-stage Pipeline
-- **Docker** Containerization (ready)
-- Automated Testing & Building
-- Code Quality Gates
+- **Dependabot** Automated Security Updates
+- **Docker Compose** Development & Production
+- **Automated Testing** auf jeder PR
+- **Quality Gates** vor Deployment
+- Multi-stage Dockerfiles (Production-ready)
+
+---
 
 ## 🚀 Quick Start
 
@@ -41,41 +63,63 @@ Ein modernes PERN Stack Monorepo mit TypeScript, Docker und vollständiger CI/CD
 
 - Node.js 20+
 - npm 10+
+- Docker & Docker Compose
 - Git
 
-### Installation
+### Installation & Start (Development)
 
 ```bash
-# Repository klonen
-git clone https://github.com/33SLueck/Pern-docker-fortress.git
-cd Pern-docker-fortress
+# 1. Repository klonen
+git clone <dein-repo-url>
+cd <projektname>
 
-# Dependencies installieren (Root + Workspaces)
+# 2. Dependencies installieren (Monorepo)
 npm install
 
-# Development Server starten
+# 3. Dev-Server starten (Frontend & Backend)
 npm run dev
 ```
 
-Das startet:
+**Standard-Ports:**
 
-- Frontend: http://localhost:5173
-- Backend: http://localhost:3000
+Um potentiellen Port-Konflikten vorzubeugen nutzen wir diese Ports . Dies lässt sich einfach im docker-compose.yml verändern.
 
-## 📁 Projekt Struktur
+- Frontend: http://localhost:5176
+- Backend: http://localhost:3006
+
+### Production mit Docker
+
+```bash
+# Images bauen & starten
+docker-compose up --build
+
+# Stoppen & aufräumen
+docker-compose down
+```
+
+---
+
+## 📁 Projekt Struktur (Template)
 
 ```
-pern-docker-fortress/
+pern-monorepo-template/
 ├── README.md
 ├── package.json              # Root package mit Workspace-Scripts
+├── docker-compose.yml        # Docker Compose für alle Services
 ├── .github/
-│   └── workflows/
-│       └── ci.yml           # GitHub Actions Pipeline
+│   ├── workflows/
+│   │   └── ci.yml           # GitHub Actions Pipeline
+│   └── dependabot.yml       # Automated Dependency Updates
 ├── .husky/                  # Git Hooks
 │   ├── pre-commit          # Lint-staged Checks
 │   ├── commit-msg          # Commitlint Validation
 │   └── pre-push            # Build & Test Checks
+├── .vscode/                 # VS Code Settings
+│   ├── settings.json       # Editor Config + Action Buttons
+│   └── tasks.json          # Build Tasks
 ├── frontend/                # React Frontend Workspace
+│   ├── Dockerfile           # Multi-stage Build für Vite
+│   ├── nginx.conf           # NGINX Config für SPA-Routing
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
@@ -85,6 +129,7 @@ pern-docker-fortress/
 │   ├── eslint.config.js
 │   └── tsconfig.json
 ├── backend/                 # Express Backend Workspace
+│   ├── Dockerfile           # Multi-stage Build für Node.js
 │   ├── src/
 │   │   └── index.ts
 │   ├── package.json
@@ -95,183 +140,277 @@ pern-docker-fortress/
 └── .prettierrc             # Code Formatting Rules
 ```
 
+---
+
 ## 🛠️ Development
 
-### Scripts
-
-#### Root Level (Monorepo)
+### Wichtige Scripts (Root)
 
 ```bash
-npm run dev              # Start Frontend + Backend
-npm run build            # Build alle Workspaces
-npm run test             # Run alle Tests
-npm run lint             # Lint alle Workspaces
-npm run lint:fix         # Lint + Auto-fix
-npm run format           # Format Code mit Prettier
+npm run dev              # Startet Frontend & Backend (Entwicklung)
+npm run build            # Build für alle Workspaces
+npm run lint             # Lint für alle Workspaces
+npm run lint:fix         # Lint + Auto-fix für alle Workspaces
+npm run test             # Tests für alle Workspaces
+npm run format           # Prettier Formatierung
 npm run type-check       # TypeScript Checks
 ```
 
-#### Frontend Workspace
+### Frontend Scripts
 
 ```bash
 npm run frontend:dev     # Vite Dev Server
 npm run frontend:build   # Production Build
 npm run frontend:test    # Vitest Tests
 npm run frontend:lint    # ESLint Check
+npm run frontend:format  # Prettier Format
 ```
 
-#### Backend Workspace
+### Backend Scripts
 
 ```bash
 npm run backend:dev      # Express Dev Server
 npm run backend:build    # TypeScript Compilation
 npm run backend:start    # Production Server
 npm run backend:lint     # ESLint Check
+npm run backend:format   # Prettier Format
 ```
 
-### Git Workflow
-
-Das Projekt nutzt **Conventional Commits** und automatische Quality Checks:
+### Docker Compose
 
 ```bash
-# Feature entwickeln
-git checkout -b feature/awesome-feature
-
-# Code schreiben & committen
-git add .
-git commit -m "feat: add awesome new feature"
+docker-compose up --build   # Build & Start aller Container
+docker-compose down         # Stop & Remove aller Container
 ```
 
-**Git Hooks (automatisch):**
+---
 
-- **pre-commit**: ESLint + Prettier auf geänderte Dateien
-- **commit-msg**: Commitlint validation
-- **pre-push**: Build + Test checks
+### Git Workflow & Quality
 
-### Code Quality Standards
+- **Conventional Commits** (commitlint enforced)
+- **pre-commit**: Lint & Format staged files
+- **pre-push**: Build & Test
 
-#### ESLint Konfiguration
-
-- **Frontend**: React + TypeScript Rules
-- **Backend**: Node.js + TypeScript Rules
-- **Flat Config Format** (ESLint v9+)
-
-#### Commit Message Format
+**Commit Message Format:**
 
 ```
 type(scope): description
-
-feat: neue Features
-fix: Bug fixes
+feat: Neue Features
+fix: Bugfixes
 docs: Dokumentation
-style: Code formatting
-refactor: Code restructuring
-test: Tests hinzufügen
-chore: Build/Tool changes
+style: Code-Formatierung
+refactor: Refactoring
+test: Tests
+chore: Build/Tooling
 ```
+
+---
 
 ## 🧪 Testing
 
-### Frontend Tests
+### Frontend Testing (Vitest)
 
 ```bash
-npm run frontend:test        # Run Tests
-npm run frontend:test:watch  # Watch Mode
-npm run frontend:test:ui     # Test UI Interface
+npm run frontend:test          # Run Tests
+npm run frontend:test:watch    # Watch Mode
+npm run frontend:test:ui       # Test UI Interface
+npm run frontend:test:coverage # Coverage Report
 ```
 
-### Backend Tests
+### Backend Testing
 
 ```bash
-npm run backend:test         # Run Backend Tests
+npm run backend:test           # Run Backend Tests
 ```
 
-### Coverage Reports
+### Test Coverage
 
-Test Coverage wird automatisch generiert und in `frontend/coverage/` gespeichert.
+- **Automatische Coverage Reports** in `frontend/coverage/`
+- **CI Integration** mit Coverage Thresholds
+- **Test Artifacts** in GitHub Actions
+
+---
 
 ## 🔧 API Endpoints
 
-### Backend Health Checks
+### Health Check Endpoints
 
-- `GET /health` - Server Health Status
-- `GET /api/health` - API Health Check
+- `GET /health` → Basic Health Status
+- `GET /api/health` → Detailed API Health Check
 
 ### Development URLs
 
-- **Frontend**: http://localhost:5173
-- **Backend**: http://localhost:3000
-- **Backend Health**: http://localhost:3000/health
+- **Frontend Development**: http://localhost:5176
+- **Backend Development**: http://localhost:3006
+- **Frontend Production** (Docker): http://localhost:5176
+- **Backend Production** (Docker): http://localhost:3006
 
-## 🐳 Docker (Coming Soon)
+### API Documentation
+
+- Erweitere die API-Dokumentation nach Bedarf
+- Swagger/OpenAPI Integration möglich
+- Postman Collections empfohlen
+
+---
+
+## 🐳 Docker
+
+### Development mit Docker
 
 ```bash
-# Docker Build
+# Alle Container starten
 docker-compose up --build
 
-# Production Deploy
-docker-compose -f docker-compose.prod.yml up
+# Im Hintergrund starten
+docker-compose up -d --build
+
+# Logs verfolgen
+docker-compose logs -f
+
+# Stoppen & Cleanup
+docker-compose down
 ```
+
+### Production Deployment
+
+```bash
+# Production Build
+docker-compose -f docker-compose.prod.yml up --build
+
+# Mit Volumes für Persistence
+docker-compose up -v ./data:/app/data --build
+```
+
+### Container Architecture
+
+- **Frontend Container**:
+  - Build: Vite → Static Files
+  - Runtime: NGINX Alpine
+  - Port: 80 → 5176 (extern)
+- **Backend Container**:
+  - Build: TypeScript → JavaScript
+  - Runtime: Node.js Alpine
+  - Port: 3000 → 3006 (extern)
+
+### Docker Features
+
+- **Multi-stage Builds** für optimale Image-Größe
+- **Health Checks** für Container-Monitoring
+- **Volume Mounts** für Development
+- **Environment Variables** für Konfiguration
+
+---
 
 ## 🚀 CI/CD Pipeline
 
-GitHub Actions Workflow mit mehreren Stages:
+### GitHub Actions Workflow
 
-1. **Setup**: Node.js 20, npm ci
-2. **Frontend**: Build, Test, Lint
-3. **Backend**: Build, Lint, Type-check
-4. **Integration**: Health checks, E2E tests
+**Multi-Stage Pipeline:**
 
-**Pipeline Trigger:**
+1. **Setup**: Node.js 20, npm ci, Cache Management
+2. **Frontend**: Build, Test, Lint, Type-Check
+3. **Backend**: Build, Lint, Type-Check
+4. **Integration**: Health Checks, End-to-End Tests
+5. **Docker**: Multi-stage Build & Push (optional)
 
-- Push to `main`
-- Pull Requests
-- Manual dispatch
+**Trigger Events:**
 
-## 📦 Dependencies
+- Push to `main` branch
+- Pull Requests zu `main`
+- Manual Dispatch
+- Scheduled runs (optional)
 
-### Production
+### Dependabot Integration
 
-- React 19.1+
-- Express 5.1+
-- TypeScript 5.9+
+**Automated Dependency Updates:**
 
-### Development
+- 📦 **npm packages** (Root, Frontend, Backend)
+- ⚙️ **GitHub Actions** workflow updates
+- 📅 **Weekly schedule** (Montags 09:00)
+- 🏷️ **Auto-labeling** nach Workspace
+- 👥 **Auto-assignment** zu Maintainer
+- 📝 **Conventional commits** formatting
 
-- ESLint 9.33+
-- Prettier 3.4+
-- Vite 6.0+
-- Vitest 2.1+
-- Husky 9.1+
+**Dependency Grouping:**
+
+- React-related packages
+- TypeScript tooling
+- Vite ecosystem
+- Express framework
+
+---
+
+## 📦 Dependencies & Versioning
+
+### Production Dependencies
+
+- **React 19.1+** (Latest with Concurrent Features)
+- **Express 5.1+** (Modern HTTP Framework)
+- **TypeScript 5.9+** (Type Safety & Performance)
+- **Tailwind CSS 4+** (Modern CSS Framework)
+
+### Development Tools
+
+- **ESLint 9.33+** (Code Linting mit Flat Config)
+- **Prettier 3.4+** (Code Formatting)
+- **Vite 7.0+** (Fast Build Tool)
+- **Vitest 3.1+** (Unit Testing Framework)
+- **Husky 9.1+** (Git Hooks Management)
+
+### Dependency Management
+
+- **Dependabot** hält Dependencies automatisch aktuell
+- **Grouped Updates** für verwandte Packages
+- **Security Patches** werden priorisiert
+- **Weekly Updates** jeden Montag
+
+---
 
 ## 🤝 Contributing
 
-1. Fork das Repository
-2. Erstelle einen Feature Branch
-3. Implementiere Changes mit Tests
-4. Stelle sicher alle Quality Checks laufen durch
-5. Erstelle einen Pull Request
+### Contribution Workflow
+
+1. **Fork** das Template Repository
+2. **Clone** deinen Fork lokal
+3. **Branch** erstellen: `git checkout -b feature/amazing-feature`
+4. **Develop** mit allen Quality Checks
+5. **Test** sicherstellen: `npm run test`
+6. **Commit** mit Conventional Commits: `npm run commit` (Commitizen)
+7. **Push** deinen Branch: `git push origin feature/amazing-feature`
+8. **Pull Request** erstellen mit detaillierter Beschreibung
+
+### Code Quality Standards
+
+- ✅ **ESLint** Rules müssen erfüllt sein
+- ✅ **Prettier** Formatierung angewendet
+- ✅ **TypeScript** ohne Errors
+- ✅ **Tests** müssen passieren
+- ✅ **Build** muss erfolgreich sein
+- ✅ **Conventional Commits** befolgen
 
 ### Development Setup
 
 ```bash
+# Repository klonen
 git clone https://github.com/33SLueck/Pern-docker-fortress.git
 cd Pern-docker-fortress
+
+# Dependencies installieren
 npm install
+
+# Pre-commit hooks aktivieren
+npm run husky:install
+
+# Development starten
 npm run dev
 ```
 
+---
+
 ## 📝 License
 
-MIT License - siehe [LICENSE](LICENSE) für Details.
-
-## 🙋‍♂️ Support
-
-- **Issues**: [GitHub Issues](https://github.com/33SLueck/Pern-docker-fortress/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/33SLueck/Pern-docker-fortress/discussions)
+MIT License – gerne für eigene Projekte verwenden!
 
 ---
 
-**Built with ❤️ by 33SLueck**
-
-_PERN Docker Fortress - Modern, Scalable, Production-Ready_
+**Template by 33SLueck – Star willkommen!**

@@ -35,10 +35,24 @@
       },
       {
         "name": "⚙️ Backend",
-        "color": "#68217a",
+        "color": "#a855f7",
         "singleInstance": true,
         "command": "npm run backend:dev",
         "tooltip": "Start Backend Only"
+      },
+      {
+        "name": "🐳 Docker Up",
+        "color": "#00ff00",
+        "singleInstance": true,
+        "command": "docker-compose up --build",
+        "tooltip": "Docker up and build"
+      },
+      {
+        "name": "🐋 Docker Down",
+        "color": "#ff0000",
+        "singleInstance": true,
+        "command": "docker-compose down",
+        "tooltip": "Stop and remove containers"
       },
       {
         "name": "⚡ QA All",
