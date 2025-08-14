@@ -22,8 +22,8 @@
     "typescript",
     "pern"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "33SLueck",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.14.0",

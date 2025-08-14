@@ -2,6 +2,9 @@
   "name": "frontend",
   "private": true,
   "version": "1.0.0",
+  "description": "PERN Stack Frontend with React",
+  "author": "33SLueck",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
