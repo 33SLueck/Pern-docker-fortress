@@ -7,6 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY ./src ./src
+COPY ./prisma ./prisma  
 
 RUN npm install --production=false
 RUN npm run build
@@ -18,6 +19,7 @@ WORKDIR /app
 
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma   
 
 RUN npm install --production
 

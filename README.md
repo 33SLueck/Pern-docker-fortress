@@ -1,11 +1,38 @@
 # PERN-Fortress Monorepo Template 🏰
 
+<!-- License & Repository Info -->
+
 ![GitHub](https://img.shields.io/github/license/33SLueck/Pern-docker-fortress)
-![Node.js Version](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
-![TypeScript](https://img.shields.io/badge/typescript-5.9+-blue)
-![React](https://img.shields.io/badge/react-19+-blue)
-![Docker](https://img.shields.io/badge/docker-ready-blue)
-![CI](https://img.shields.io/github/actions/workflow/status/33SLueck/Pern-docker-fortress/ci.yml?branch=main&label=CI)
+![GitHub Stars](https://img.shields.io/github/stars/33SLueck/Pern-docker-fortress?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/33SLueck/Pern-docker-fortress?style=social)
+
+<!-- Tech Stack - PERN Components -->
+
+![PostgreSQL](https://img.shields.io/badge/postgresql-16+-blue?logo=postgresql&logoColor=white)
+![Express.js](https://img.shields.io/badge/express-5.1+-green?logo=express&logoColor=white)
+![React](https://img.shields.io/badge/react-19+-blue?logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen?logo=node.js&logoColor=white)
+
+<!-- Development Tools -->
+
+![TypeScript](https://img.shields.io/badge/typescript-5.9+-blue?logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/prisma-6.14+-indigo?logo=prisma&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-7+-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/tailwindcss-4+-38B2AC?logo=tailwind-css&logoColor=white)
+
+<!-- Quality & Automation -->
+
+![ESLint](https://img.shields.io/badge/eslint-9+-4B32C3?logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/prettier-3.4+-F7B93E?logo=prettier&logoColor=white)
+![Husky](https://img.shields.io/badge/husky-9+-yellow?logo=git&logoColor=white)
+![Dependabot](https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=github&logoColor=white)
+
+<!-- Containerization & CI/CD -->
+
+![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/docker--compose-multi--service-blue?logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github--actions-CI%2FCD-blue?logo=github-actions&logoColor=white)
+![CI Status](https://img.shields.io/github/actions/workflow/status/33SLueck/Pern-docker-fortress/ci.yml?branch=main&label=CI&logo=github-actions)
 
 Ein modernes, flexibles PERN Stack Monorepo-Template mit TypeScript, Docker und CI/CD – ready für Production & eigene Projekte!
 
@@ -34,6 +61,9 @@ Ein modernes, flexibles PERN Stack Monorepo-Template mit TypeScript, Docker und 
 
 - **Express.js v5** (oder eigene API) mit TypeScript
 - **Node.js** Runtime
+- **PostgreSQL 16** Database
+- **Prisma ORM** für Type-safe Database Access
+- **Prisma Studio** für Database Management
 - RESTful API Architektur
 - Health Check Endpoints
 
@@ -86,6 +116,8 @@ Um potentiellen Port-Konflikten vorzubeugen nutzen wir diese Ports . Dies lässt
 
 - Frontend: http://localhost:5176
 - Backend: http://localhost:3006
+- PostgreSQL: http://localhost:5436
+- Prisma Studio: http://localhost:5556
 
 ### Production mit Docker
 
@@ -253,18 +285,138 @@ npm run backend:test           # Run Backend Tests
 
 ---
 
-## 🐳 Docker
+## �️ Database & Prisma
+
+### PostgreSQL mit Prisma ORM
+
+**Prisma Setup:**
+
+```bash
+# Database Migration (im Container)
+docker-compose run --rm backend npx prisma migrate dev --name init
+
+# Prisma Client generieren
+docker-compose run --rm backend npx prisma generate
+
+# Database seeden (optional)
+docker-compose run --rm backend npx prisma db seed
+```
+
+### Database Migrations
+
+**Neue Migration erstellen:**
+
+```bash
+# 1. Schema in backend/prisma/schema.prisma ändern
+# 2. Migration ausführen
+docker-compose run --rm backend npx prisma migrate dev --name "add_user_table"
+```
+
+**Production Migrations:**
+
+```bash
+# Für Production (ohne prompts)
+docker-compose run --rm backend npx prisma migrate deploy
+```
+
+### Database Seeding
+
+**Seed Script erstellen** (`backend/prisma/seed.ts`):
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  // Beispiel: Demo-User erstellen
+  const alice = await prisma.user.upsert({
+    where: { email: 'alice@example.com' },
+    update: {},
+    create: {
+      email: 'alice@example.com',
+      name: 'Alice',
+    },
+  });
+
+  console.log({ alice });
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+```
+
+**In `backend/package.json` hinzufügen:**
+
+```json
+{
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
+```
+
+**Seed ausführen:**
+
+```bash
+docker-compose run --rm backend npx prisma db seed
+```
+
+### Prisma Studio
+
+**Database Browser starten:**
+
+```bash
+# Mit Docker Compose
+docker-compose up prisma-studio
+
+# Dann öffnen: http://localhost:5556
+```
+
+**Lokaler Zugriff:**
+
+```bash
+# Falls lokal installiert
+cd backend && npx prisma studio
+```
+
+### Database URLs
+
+**Development:**
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@db:5432/postgres"
+```
+
+**Production:**
+
+```env
+DATABASE_URL="postgresql://user:password@host:5432/dbname"
+```
+
+---
+
+## �🐳 Docker
 
 ### Development mit Docker
 
 ```bash
-# Alle Container starten
+# Alle Services starten (Backend, Frontend, DB, Prisma Studio)
 docker-compose up --build
 
-# Im Hintergrund starten
-docker-compose up -d --build
+# Nur bestimmte Services
+docker-compose up db backend          # Backend + Database
+docker-compose up prisma-studio       # Nur Prisma Studio
 
-# Logs verfolgen
+# Im Hintergrund starten
+docker-compose up -d --build# Logs verfolgen
 docker-compose logs -f
 
 # Stoppen & Cleanup
@@ -289,8 +441,18 @@ docker-compose up -v ./data:/app/data --build
   - Port: 80 → 5176 (extern)
 - **Backend Container**:
   - Build: TypeScript → JavaScript
-  - Runtime: Node.js Alpine
+  - Runtime: Node.js Alpine + Prisma
   - Port: 3000 → 3006 (extern)
+
+- **Database Container**:
+  - Image: PostgreSQL 16 Alpine
+  - Port: 5432 → 5436 (extern)
+  - Volume: `postgres_data` für Persistenz
+
+- **Prisma Studio Container**:
+  - Build: Backend Image + Prisma Studio
+  - Port: 5555 → 5556 (extern)
+  - Database Management UI
 
 ### Docker Features
 
@@ -347,9 +509,9 @@ docker-compose up -v ./data:/app/data --build
 - **React 19.1+** (Latest with Concurrent Features)
 - **Express 5.1+** (Modern HTTP Framework)
 - **TypeScript 5.9+** (Type Safety & Performance)
-- **Tailwind CSS 4+** (Modern CSS Framework)
-
-### Development Tools
+- **PostgreSQL 16+** (Reliable Database)
+- **Prisma 6.14+** (Type-safe ORM)
+- **Tailwind CSS 4+** (Modern CSS Framework)### Development Tools
 
 - **ESLint 9.33+** (Code Linting mit Flat Config)
 - **Prettier 3.4+** (Code Formatting)

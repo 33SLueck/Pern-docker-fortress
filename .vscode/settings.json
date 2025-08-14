@@ -85,17 +85,17 @@
         "tooltip": "Lint All Code"
       },
       {
+        "name": "� Type Check",
+        "color": "#3178c6",
+        "command": "npm run type-check",
+        "tooltip": "TypeScript Check Both"
+      },
+      {
         "name": "📝 Commit",
         "color": "#88ff00",
         "command": "npx cz",
         "tooltip": "Guided Commit (Commitizen)"
       },
-      {
-        "name": "� Type Check",
-        "color": "#3178c6",
-        "command": "npm run type-check",
-        "tooltip": "TypeScript Check Both"
-      }
     ]
   },
   "editor.codeActionsOnSave": {
